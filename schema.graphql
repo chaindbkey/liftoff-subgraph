@@ -1,0 +1,77 @@
+type TokenSale @entity {
+  id: ID!
+  tokenId: BigInt!
+  ipfsHash: String!
+  startTime: Int!
+  endTime: Int!
+  softCap: BigInt!
+  hardCap: BigInt!
+  totalSupply: BigInt!
+  totalIgnited: BigInt!
+  rewardSupply: BigInt!
+  dev: Bytes!
+  deployed: Bytes!
+  pair: Bytes!
+  isSparked: Boolean!
+  name: String!
+  symbol: String!
+  ignitors: [Ignitor]! @derivedFrom(field: "tokenSale")
+  partnershipRequests: [Partnership]! @derivedFrom(field: "tokenSale")
+}
+
+type Ignitor @entity {
+  id: ID!
+  address: Bytes!
+  ignited: BigInt!
+  hasClaimed: Boolean!
+  hasRefunded: Boolean!
+  tokenSale: TokenSale!
+}
+
+type TokenInsurance @entity {
+  id: ID!
+  tokenId: BigInt!
+  isRegistered: Boolean!
+  isInitialized: Boolean!
+  startTime: Int
+  totalIgnited: BigInt
+  tokensPerEthWad: BigInt
+  baseXEth: BigInt
+  baseTokenLidPool: BigInt
+  redeemedXEth: BigInt
+  claimedXEth: BigInt
+  claimedTokenLidPool: BigInt
+  dev: Bytes
+  deployed: Bytes
+  pair: Bytes
+  isUnwound: Boolean
+  hasBaseFeeClaimed: Boolean
+}
+
+type Partner @entity {
+  id: ID!
+  partnerId: BigInt!
+  controller: Bytes!
+  ipfsHash: String!
+  partnershipRequests: [Partnership]! @derivedFrom(field: "partner")
+}
+
+type TokenSalePartnership @entity {
+  id: ID!
+  tokenSaleId: BigInt!
+  totalPartnerships: Int!
+  totalBPForPartners: BigInt!
+  partnershipRequests: [Partnership]!
+    @derivedFrom(field: "tokenSalePartnership")
+}
+
+type Partnership @entity {
+  id: ID!
+  partnerId: BigInt!
+  tokenSaleId: BigInt!
+  feeBP: BigInt!
+  isApproved: Boolean!
+  tokenSale: TokenSale!
+  partner: Partner!
+  tokenSalePartnership: TokenSalePartnership!
+}
